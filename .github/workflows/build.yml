@@ -49,12 +49,10 @@ jobs:
 
       - name: Compiler l'APK
         run: |
-          set -euo pipefail
           echo "JAVA_HOME utilisé : $JAVA_HOME"
           java -version
-          yes | buildozer -v android debug 2>&1 | tee buildozer_log.txt
-          # pipefail (activé ci-dessus) garantit que si buildozer échoue,
-          # ce step échoue aussi, même à travers le tee.
+          buildozer -v android debug 2>&1 | tee buildozer_log.txt
+          exit ${PIPESTATUS[0]}
 
       - name: Publier les logs (utile en cas d'échec)
         if: always()
