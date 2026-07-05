@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer les dépendances système
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk python3-pip python3-venv \
+            autoconf libtool pkg-config zlib1g-dev \
+            libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev \
+            build-essential ccache automake
+
+      - name: Installer Buildozer
+        run: |
+          pip3 install --upgrade pip
+          pip3 install --upgrade buildozer cython==0.29.33 virtualenv
+
+      - name: Mettre en cache les téléchargements Buildozer (SDK/NDK)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            .buildozer
+          key: buildozer-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            buildozer-
+
+      - name: Compiler l'APK
+        run: |
+          yes | buildozer -v android debug 2>&1 | tee buildozer_log.txt
+
+      - name: Publier les logs (utile en cas d'échec)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildozer-log
+          path: buildozer_log.txt
+
+      - name: Publier l'APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compteur-romantique-apk
+          path: bin/*.apk

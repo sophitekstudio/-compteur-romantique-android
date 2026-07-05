@@ -1,0 +1,249 @@
+#:import dp kivy.metrics.dp
+
+<ButtonPink>:
+    background_normal: ''
+    background_down: ''
+    background_color: 1, 0.71, 0.75, 1
+    color: 0.196, 0.078, 0.157, 1
+    bold: True
+    font_name: app.font_name
+
+<ButtonGhost>:
+    background_normal: ''
+    background_down: ''
+    background_color: 0, 0, 0, 0
+    color: 1, 0.71, 0.75, 1
+    canvas.before:
+        Color:
+            rgba: 1, 0.71, 0.75, 1
+        Line:
+            width: 1.4
+            rectangle: self.x, self.y, self.width, self.height
+
+<ButtonMenu>:
+    background_normal: ''
+    background_down: ''
+    background_color: 0.196, 0.059, 0.275, 0.82
+    color: 1, 0.71, 0.75, 1
+    bold: True
+    font_size: '17sp'
+    size_hint: None, None
+    size: dp(260), dp(58)
+    canvas.before:
+        Color:
+            rgba: 1, 0.392, 0.510, 1
+        Line:
+            width: 1.4
+            rounded_rectangle: self.x, self.y, self.width, self.height, dp(14)
+
+<ButtonToggle>:
+    background_normal: ''
+    background_down: ''
+    background_color: (1, 0.392, 0.510, 1) if self.state == 'down' else (0.2, 0.08, 0.27, 0.9)
+    color: 1, 1, 1, 1
+
+<Header@BoxLayout>:
+    title: ''
+    size_hint_y: None
+    height: dp(52)
+    canvas.before:
+        Color:
+            rgba: 0.05, 0.03, 0.09, 0.9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 1, 0.392, 0.510, 1
+        Line:
+            points: self.x, self.y, self.x + self.width, self.y
+            width: 1
+    Label:
+        text: root.title
+        color: 1, 0.84, 0, 1
+        bold: True
+        font_size: '18sp'
+        halign: 'left'
+        text_size: self.size
+        padding: dp(20), 0
+
+<FooterBar@BoxLayout>:
+    size_hint_y: None
+    height: dp(52)
+    padding: dp(16), dp(8)
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: 0.05, 0.03, 0.09, 0.7
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<EventCard>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: self.minimum_height
+    padding: dp(16), dp(12)
+    spacing: dp(5)
+    canvas.before:
+        Color:
+            rgba: 0.118, 0.039, 0.196, 0.85
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(14)]
+        Color:
+            rgba: 1, 0.392, 0.510, 1
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, dp(14)
+            width: 1
+    Label:
+        text: root.ev_name
+        color: 1, 0.84, 0, 1
+        bold: True
+        font_size: '16sp'
+        size_hint_y: None
+        height: self.texture_size[1] + dp(6)
+        text_size: self.width, None
+        halign: 'left'
+    Label:
+        text: root.ev_main
+        color: 1, 0.878, 0.918, 1
+        font_size: '13sp'
+        size_hint_y: None
+        height: self.texture_size[1] + dp(6)
+        text_size: self.width, None
+        halign: 'left'
+    Label:
+        text: root.ev_next
+        color: 1, 0.71, 0.75, 1
+        font_size: '12sp'
+        size_hint_y: None
+        height: (self.texture_size[1] + dp(4)) if root.ev_next else 0
+        text_size: self.width, None
+        halign: 'left'
+    BoxLayout:
+        size_hint_y: None
+        height: dp(36)
+        spacing: dp(8)
+        ButtonGhost:
+            text: '✏ Modifier'
+            on_release: root.do_edit()
+        ButtonGhost:
+            text: '🗑 Supprimer'
+            color: 1, 0.31, 0.31, 1
+            on_release: root.do_delete()
+
+
+<MenuScreen>:
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: dp(300), dp(420)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+            spacing: dp(16)
+            Label:
+                text: '💖'
+                font_size: '48sp'
+                size_hint_y: None
+                height: dp(64)
+            Label:
+                text: 'Compteur Romantique'
+                color: 1, 0.84, 0, 1
+                bold: True
+                font_size: '24sp'
+                size_hint_y: None
+                height: dp(36)
+            Label:
+                text: 'Sophitek Studio — Japhet A. ASSOGBA'
+                color: 1, 0.392, 0.510, 1
+                font_size: '11sp'
+                size_hint_y: None
+                height: dp(30)
+            ButtonMenu:
+                text: '🕐  Compteurs'
+                pos_hint: {'center_x': 0.5}
+                on_release: app.go('compteurs')
+            ButtonMenu:
+                text: '➕  Ajouter'
+                pos_hint: {'center_x': 0.5}
+                on_release: app.go('ajouter')
+            ButtonMenu:
+                text: '📅  Les Dates'
+                pos_hint: {'center_x': 0.5}
+                on_release: app.go('dates')
+            ButtonMenu:
+                text: '🚪  Quitter'
+                pos_hint: {'center_x': 0.5}
+                on_release: app.quit_app()
+        Label:
+            text: 'v3.0 (Android) — Chaque seconde compte… 💖'
+            color: 1, 0.71, 0.75, 0.6
+            font_size: '10sp'
+            size_hint: None, None
+            size: dp(320), dp(24)
+            pos_hint: {'center_x': 0.5, 'y': 0.02}
+
+
+<CompteursScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Header:
+            title: '🕐  Compteurs Romantiques'
+        ScrollView:
+            BoxLayout:
+                id: cards_box
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(14), dp(10)
+                spacing: dp(10)
+        FooterBar:
+            ButtonGhost:
+                text: '← Menu'
+                size_hint_x: None
+                width: dp(110)
+                on_release: app.go('menu')
+
+
+<AjouterScreen>:
+    on_pre_enter: root.open_form()
+    BoxLayout:
+        orientation: 'vertical'
+        Header:
+            title: '➕  Ajouter un événement'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "Utilise le bouton ci-dessous pour ajouter\nun nouvel événement à tout moment."
+                color: 1, 0.71, 0.75, 1
+        FooterBar:
+            ButtonPink:
+                text: '➕ Nouvel événement'
+                on_release: root.open_form()
+            ButtonGhost:
+                text: '← Menu'
+                size_hint_x: None
+                width: dp(110)
+                on_release: app.go('menu')
+
+
+<DatesScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Header:
+            title: '📅  Dates enregistrées'
+        ScrollView:
+            BoxLayout:
+                id: dates_box
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(14), dp(10)
+                spacing: dp(8)
+        FooterBar:
+            ButtonGhost:
+                text: '← Menu'
+                size_hint_x: None
+                width: dp(110)
+                on_release: app.go('menu')
